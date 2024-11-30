@@ -2,8 +2,12 @@
 import { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import { useSession } from 'next-auth/react';
+import Router, { useRouter } from 'next/router';
 
 export default function Admin() {
+  const { data: session, status } = useSession();  // status gives loading state
+
   const [activeTab, setActiveTab] = useState('manageProducts');
   const [products, setProducts] = useState([
     {
@@ -17,6 +21,8 @@ export default function Admin() {
   ]);
 
 
+  const router = useRouter();
+
   const fetchProducts = async () => {
     const response = await fetch(`/api/items`);
     const initialProducts = await response.json();
@@ -25,11 +31,24 @@ export default function Admin() {
   }
 
 
-  useEffect(()=>{
-  
-    fetchProducts()
+  const checkSession = async () => {
+    // await console.log(data); 
+  }
+  useEffect(() => {
+    // Ensure session is available before proceeding
+    if (status === 'loading') return; // Wait until session is loaded
+    if (!session) {
+      // Redirect to login if no session
+      router.push('/');
+    } else {
+      if(session.user.role === 'admin'){
+      fetchProducts();
+      }else{
+        router.push('/')
+      }
+    }
+  }, [session, status]);  // Trigger when session or status changes
 
-  },[])
 
   const [newProduct, setNewProduct] = useState({
     name: '',
@@ -94,6 +113,8 @@ export default function Admin() {
     role: 'user'
   });
 
+if(session){
+  if(session.user.role === 'admin'){
   return (
     <div>
       <Navbar />
@@ -276,4 +297,6 @@ export default function Admin() {
       <Footer />
     </div>
   );
+}
+}
 }

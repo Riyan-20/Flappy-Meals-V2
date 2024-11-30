@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { signIn } from 'next-auth/react'; // Import signIn from next-auth
+import { signIn, useSession } from 'next-auth/react'; // Import signIn from next-auth
 import { useRouter } from 'next/router'; // Import useRouter for redirection
 import Navbar from '../components/Navbar';
 
@@ -8,6 +8,8 @@ export default function Login() {
     email: '',
     password: '',
   });
+
+  const {data:session} = useSession();
 
   const [error, setError] = useState(''); // To hold error message
   const [isLoading, setIsLoading] = useState(false); // To handle loading state
@@ -31,7 +33,7 @@ export default function Login() {
     if (res?.error) {
       setError('Invalid email or password'); // Show error if login fails
     } else {
-      router.push('/dashboard'); // Redirect to dashboard on successful login
+        router.push('/dashboard'); // Redirect to dashboard on successful login
     }
   };
 

@@ -12,9 +12,12 @@ const Navbar = () => {
 
 
   useEffect(()=>{
-
+    console.log(session);  
     if(session){
       setIsLoggedIn(true);
+      if(session.user.role === 'admin'){
+        setIsAdmin(true); 
+      }
     }else{
       setIsLoggedIn(false)
     }

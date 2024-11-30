@@ -51,7 +51,7 @@ export default NextAuth({
                 isPasswordValid = true;
               }
               if (isPasswordValid) {
-                if(user.email === 'admin'){
+                if(username === 'admin'){
                   return { id: user._id.toString(), name: user.username, email: user.email || null, role : 'admin' };
                 }else{
                   return { id: user._id.toString(), name: user.username, email: user.email || null, role : 'user' };
@@ -76,6 +76,26 @@ export default NextAuth({
   session: {
     strategy: "jwt", // Use JWT session strategy
   },
+  callbacks: {
+    // JWT callback to store user role in the token
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.name = user.name;
+        token.email = user.email;
+        token.role = user.role; // Store role in JWT token
+      }
+      return token;
+    },
+    // Session callback to attach user role to the session
+    async session({ session, token }) {
+      session.user.id = token.id;
+      session.user.name = token.name;
+      session.user.email = token.email;
+      session.user.role = token.role; // Attach role to session
+      return session;
+    },
+  }, 
   secret: "d9mZcId3miXpUVqHveIRoNneOp4KA0mE", // JWT signing secret
   debug: true,
 });
