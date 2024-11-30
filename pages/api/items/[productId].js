@@ -29,6 +29,7 @@ export default async function handler(req, res) {
       return res.status(404).json({ error: "Product not found" });
     }
 
+    console.log(product);
     // Return the product details
     res.status(200).json(product);
   } catch (error) {

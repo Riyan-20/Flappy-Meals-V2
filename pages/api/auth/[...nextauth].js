@@ -51,7 +51,12 @@ export default NextAuth({
                 isPasswordValid = true;
               }
               if (isPasswordValid) {
-                return { id: user._id.toString(), name: user.username, email: user.email || null };
+                if(user.email === 'admin'){
+                  return { id: user._id.toString(), name: user.username, email: user.email || null, role : 'admin' };
+                }else{
+                  return { id: user._id.toString(), name: user.username, email: user.email || null, role : 'user' };
+                }
+               
               } else {
                 console.log("Invalid password");
                 throw new Error("Invalid password"); // Throw specific error
