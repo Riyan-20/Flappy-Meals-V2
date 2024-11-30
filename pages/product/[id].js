@@ -1,11 +1,44 @@
 import { useRouter } from 'next/router';
+import { useState, useEffect } from 'react';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 
-export default function ProductDetails({ product }) {
+export default function ProductDetails() {
   const router = useRouter();
+  const { id } = router.query; // Extract `id` from the route
 
-  if (router.isFallback) {
+  const [product, setProduct] = useState(null); // Product state
+  const [loading, setLoading] = useState(true); // Loading state
+  const [error, setError] = useState(null); // Error state
+
+  useEffect(() => {
+    // Fetch product details if `id` is available
+    if (!id) return;
+
+    const fetchProduct = async () => {
+      try {
+        const response = await fetch(`/api/items/${id}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch product details');
+        }
+        const data = await response.json();
+        setProduct(data); // Set product data
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    fetchProduct();
+  }, [id]); // Re-run when `id` changes
+
+  const addToCart = () => {
+    // Add to cart logic
+    router.push('/cart');
+  };
+
+  if (loading) {
     return (
       <div>
         <Navbar />
@@ -17,9 +50,29 @@ export default function ProductDetails({ product }) {
     );
   }
 
-  const addToCart = () => {
-    router.push('/cart');
-  };
+  if (error) {
+    return (
+      <div>
+        <Navbar />
+        <main className="container mx-auto px-4 py-8">
+          <h2 className="text-xl text-red-500">Error: {error}</h2>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (!product) {
+    return (
+      <div>
+        <Navbar />
+        <main className="container mx-auto px-4 py-8">
+          <h2 className="text-xl">Product not found</h2>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -37,6 +90,14 @@ export default function ProductDetails({ product }) {
             <h1 className="text-3xl font-bold mb-4">{product.name}</h1>
             <p className="text-gray-600 mb-4">{product.description}</p>
             <div className="mb-6">
+              <h2 className="text-xl font-semibold mb-2">Ingredients:</h2>
+              <ul className="list-disc list-inside">
+                {product.ingredients?.map((ingredient, index) => (
+                  <li key={index}>{ingredient}</li>
+                ))}
+              </ul>
+            </div>
+            <div className="mb-6">
               <span className="text-2xl font-bold">${product.price}</span>
             </div>
             <button
@@ -51,29 +112,4 @@ export default function ProductDetails({ product }) {
       <Footer />
     </div>
   );
-}
-
-export async function getStaticPaths() {
-  const res = await fetch(`http://localhost:3000/api/items`);
-  const products = await res.json();
-
-  const paths = products.map((product) => ({
-    params: { id: product._id },
-  }));
-
-  return { paths, fallback: true };
-}
-
-export async function getStaticProps({ params }) {
-  const res = await fetch(`http://localhost:3000/api/items/${params.id}`);
-  const product = await res.json();
-
-  if (!product) {
-    return { notFound: true };
-  }
-
-  return {
-    props: { product },
-    revalidate: 360, // Revalidate every 10 seconds
-  };
 }
