@@ -1,30 +1,20 @@
 // pages/cart.js
-import { useState } from 'react';
 import { useRouter } from 'next/router';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import { useCart } from '../context/CartContext';
 
 export default function Cart() {
   const router = useRouter();
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: 'Burger Deluxe',
-      price: 9.99,
-      quantity: 2,
-      image: '/api/placeholder/100/100'
-    },
-    // Add more items
-  ]);
+  const { state, dispatch } = useCart();
+  const cartItems = state;
 
   const updateQuantity = (id, newQuantity) => {
-    setCartItems(cartItems.map(item =>
-      item.id === id ? {...item, quantity: newQuantity} : item
-    ));
+    dispatch({ type: 'UPDATE_QUANTITY', id, quantity: newQuantity });
   };
 
   const removeItem = (id) => {
-    setCartItems(cartItems.filter(item => item.id !== id));
+    dispatch({ type: 'REMOVE_ITEM', id });
   };
 
   const total = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
@@ -82,11 +72,11 @@ export default function Cart() {
                   </div>
                   <div className="flex justify-between">
                     <span>Delivery Fee</span>
-                    <span>$2.99</span>
+                    <span>$50.00</span>
                   </div>
                   <div className="flex justify-between font-bold pt-2 border-t">
                     <span>Total</span>
-                    <span>${(total + 2.99).toFixed(2)}</span>
+                    <span>${(total + 50).toFixed(2)}</span>
                   </div>
                 </div>
                 <button

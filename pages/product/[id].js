@@ -8,19 +8,59 @@ export default function ProductDetails() {
   const { id } = router.query;
 
   // Mock product data - replace with actual API call
-  const product = {
-    id: id,
-    name: 'Burger Deluxe',
-    description: 'A juicy beef patty with fresh lettuce, tomatoes, and our special sauce',
-    price: 9.99,
-    image: '/api/placeholder/500/300',
-    ingredients: ['Beef Patty', 'Lettuce', 'Tomatoes', 'Special Sauce', 'Sesame Bun'],
-  };
+  const products = [
+    {
+      id: 1,
+      name: 'Burger Deluxe',
+      description: 'A juicy beef patty with fresh lettuce, tomatoes, and our special sauce',
+      price: 9.99,
+      image: '/api/placeholder/500/300',
+      ingredients: ['Beef Patty', 'Lettuce', 'Tomatoes', 'Special Sauce', 'Sesame Bun'],
+    },
+    {
+      id: 2,
+      name: 'Veggie Burger',
+      description: 'A delicious veggie patty with fresh lettuce, tomatoes, and special sauce',
+      price: 8.99,
+      image: '/api/placeholder/500/300',
+      ingredients: ['Veggie Patty', 'Lettuce', 'Tomatoes', 'Special Sauce', 'Sesame Bun'],
+    },
+    {
+      id: 3,
+      name: 'Chicken Sandwich',
+      description: 'Grilled chicken with fresh lettuce, tomatoes, and mayo',
+      price: 7.99,
+      image: '/api/placeholder/500/300',
+      ingredients: ['Grilled Chicken', 'Lettuce', 'Tomatoes', 'Mayo', 'Bun'],
+    },
+    {
+      id: 4,
+      name: 'Fries',
+      description: 'Crispy golden fries',
+      price: 3.99,
+      image: '/api/placeholder/500/300',
+      ingredients: ['Potatoes', 'Salt', 'Oil'],
+    },
+    {
+      id: 5,
+      name: 'Soda',
+      description: 'Refreshing soda',
+      price: 1.99,
+      image: '/api/placeholder/500/300',
+      ingredients: ['Carbonated Water', 'Sugar', 'Flavoring'],
+    }
+  ];
+
+  const product = products.find(p => p.id === parseInt(id));
 
   const addToCart = () => {
     // Add to cart logic
     router.push('/cart');
   };
+
+  if (!product) {
+    return <div>Product not found</div>;
+  }
 
   return (
     <div>

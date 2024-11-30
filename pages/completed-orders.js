@@ -1,22 +1,21 @@
-// pages/my-orders.js
+// pages/completed-orders.js
 import { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import OrderCard from '../components/OrderCard';
 
-export default function MyOrders() {
+export default function CompletedOrders() {
   const [orders, setOrders] = useState([]);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await fetch('/api/CurrentOrderForUser', {
-          method: 'POST',
+        const response = await fetch('/api/completedOrders?customerId=21L1790', {
+          method: 'GET',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ customerId: '21L1790' }), // Replace with the actual customerId
         });
 
         if (!response.ok) {
@@ -24,7 +23,6 @@ export default function MyOrders() {
         }
 
         const data = await response.json();
-        console.log('Fetched orders:', data); // Log the fetched orders for debugging
         setOrders(data);
       } catch (error) {
         setError(error.message);
@@ -38,7 +36,7 @@ export default function MyOrders() {
     <div>
       <Navbar />
       <main className="container mx-auto px-4 py-8">
-        <h1 className="text-2xl font-bold mb-6">My Orders</h1>
+        <h1 className="text-2xl font-bold mb-6">Completed Orders</h1>
         {error && <p className="text-red-500 mb-4">Error: {error}</p>}
         <div className="max-w-2xl mx-auto">
           {orders.length > 0 ? (
@@ -46,7 +44,7 @@ export default function MyOrders() {
               <OrderCard key={order._id} order={order} />
             ))
           ) : (
-            <p className="text-xl text-gray-600">No current orders</p>
+            <p className="text-xl text-gray-600">No completed orders</p>
           )}
         </div>
       </main>
