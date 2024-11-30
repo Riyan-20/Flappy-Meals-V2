@@ -44,6 +44,7 @@ export default function Admin() {
 
 
   const [newProduct, setNewProduct] = useState({
+    _id : '',
     name: '',
     description: '',
     price: '',
@@ -72,7 +73,7 @@ export default function Admin() {
     e.preventDefault();
   
     const product = {
-      // id: products.length + 1, // Automatically calculate the ID
+      // _id: products._id + 1, // Automatically calculate the ID
       ...newProduct,
       price: parseFloat(newProduct.price), // Ensure price is a number
     };
@@ -105,7 +106,8 @@ export default function Admin() {
   
 
   const handleRemoveProduct = (id) => {
-    setProducts(products.filter(product => product.id !== id));
+    console.log(id);
+    setProducts(products.filter(product => product._id !== id));
   };
 
   const handleAddUser = (e) => {
@@ -144,12 +146,6 @@ if(session){
               onClick={() => setActiveTab('manageProducts')}
             >
               Manage Products
-            </li>
-            <li
-              className={`cursor-pointer ${activeTab === 'manageUsers' ? 'font-bold' : ''}`}
-              onClick={() => setActiveTab('manageUsers')}
-            >
-              Manage Users
             </li>
             <li
               className={`cursor-pointer ${activeTab === 'viewOrders' ? 'font-bold' : ''}`}
@@ -209,7 +205,7 @@ if(session){
             <h2 className="text-xl font-semibold mb-4">Product List</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {products.map(product => (
-                <div key={product.id} className="border rounded-lg p-4">
+                <div key={product._id} className="border rounded-lg p-4">
                   <h3 className="text-xl font-semibold">{product.name}</h3>
                   <p className="text-gray-600">{product.description}</p>
                   <p className="text-lg font-bold">${product.price}</p>
@@ -220,7 +216,7 @@ if(session){
                   />
                   <button
                     className="mt-4 bg-red-500 text-white py-2 rounded-lg hover:bg-red-600"
-                    onClick={() => handleRemoveProduct(product.id)}
+                    onClick={() => handleRemoveProduct(product._id)}
                   >
                     Remove Product
                   </button>
@@ -229,64 +225,7 @@ if(session){
             </div>
           </div>
         )}
-        {activeTab === 'manageUsers' && (
-          <div>
-            <h2 className="text-xl font-semibold mb-4">Add New User</h2>
-            <form onSubmit={handleAddUser} className="space-y-4 mb-8">
-              <div>
-                <label className="block text-gray-700 mb-2">Name</label>
-                <input
-                  type="text"
-                  className="w-full border rounded-lg px-4 py-2"
-                  value={newUser.name}
-                  onChange={(e) => setNewUser({...newUser, name: e.target.value})}
-                />
-              </div>
-              <div>
-                <label className="block text-gray-700 mb-2">Email</label>
-                <input
-                  type="email"
-                  className="w-full border rounded-lg px-4 py-2"
-                  value={newUser.email}
-                  onChange={(e) => setNewUser({...newUser, email: e.target.value})}
-                />
-              </div>
-              <div>
-                <label className="block text-gray-700 mb-2">Role</label>
-                <select
-                  className="w-full border rounded-lg px-4 py-2"
-                  value={newUser.role}
-                  onChange={(e) => setNewUser({...newUser, role: e.target.value})}
-                >
-                  <option value="user">User</option>
-                  <option value="admin">Admin</option>
-                </select>
-              </div>
-              <button
-                type="submit"
-                className="w-full bg-orange-500 text-white py-2 rounded-lg hover:bg-orange-600"
-              >
-                Add User
-              </button>
-            </form>
-            <h2 className="text-xl font-semibold mb-4">User List</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {users.map(user => (
-                <div key={user.id} className="border rounded-lg p-4">
-                  <h3 className="text-xl font-semibold">{user.name}</h3>
-                  <p className="text-gray-600">{user.email}</p>
-                  <p className="text-lg font-bold">{user.role}</p>
-                  <button
-                    className="mt-4 bg-red-500 text-white py-2 rounded-lg hover:bg-red-600"
-                    onClick={() => handleRemoveUser(user.id)}
-                  >
-                    Remove User
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+
         {activeTab === 'viewOrders' && (
           <div>
             <h2 className="text-xl font-semibold mb-4">Order List</h2>

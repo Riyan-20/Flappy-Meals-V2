@@ -20,14 +20,6 @@ export default async function handler(req, res) {
     const db = client.db('flappyMeals');
     const collection = db.collection('items');
 
-    // Check if the product with the same ID already exists
-    // const existingProduct = await collection.findOne({ id });
-    // if (existingProduct) {
-    //   client.close();
-    //   return res.status(409).json({ message: 'Product with the same ID already exists' });
-    // }
-
-    // Insert the product into the collection
     const result = await collection.insertOne({
     
       name,
