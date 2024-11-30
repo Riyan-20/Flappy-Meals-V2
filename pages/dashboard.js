@@ -3,6 +3,7 @@ import Navbar from '../components/Navbar';
 import ProductCard from '../components/ProductCard';
 import { useRouter } from 'next/router';
 import { useSession } from "next-auth/react";
+import { useEffect } from 'react';
 
 // Fetcher function for useSWR
 const fetcher = async (url) => {
@@ -16,6 +17,8 @@ const fetcher = async (url) => {
 export default function Dashboard({ initialProducts }) {
   const router = useRouter();
   const { data: session } = useSession();
+
+
 
   // SWR hook for client-side revalidation
   const { data: products, error } = useSWR('/api/items', fetcher, {
