@@ -1,5 +1,5 @@
 // pages/admin.js
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
@@ -15,6 +15,21 @@ export default function Admin() {
     },
     // Add more products
   ]);
+
+
+  const fetchProducts = async () => {
+    const response = await fetch(`/api/items`);
+    const initialProducts = await response.json();
+
+    setProducts(initialProducts); 
+  }
+
+
+  useEffect(()=>{
+  
+    fetchProducts()
+
+  },[])
 
   const [newProduct, setNewProduct] = useState({
     name: '',
@@ -161,7 +176,7 @@ export default function Admin() {
                   <p className="text-gray-600">{product.description}</p>
                   <p className="text-lg font-bold">${product.price}</p>
                   <img
-                    src={product.image}
+                    src={product.imageUrl}
                     alt={product.name}
                     className="w-full h-48 object-cover mt-4 rounded-lg"
                   />
