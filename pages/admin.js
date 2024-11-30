@@ -105,10 +105,41 @@ export default function Admin() {
   };
   
 
-  const handleRemoveProduct = (id) => {
-    console.log(id);
-    setProducts(products.filter(product => product._id !== id));
+  const handleRemoveProduct = async (id) => {
+    try {
+      // Fetch the role from the session
+      const role = session?.user?.role;
+  
+      if (!role || role !== 'admin') {
+        alert('You are not authorized to delete this product.');
+        return;
+      }
+  
+      // Call the delete-product API
+      const response = await fetch('/api/delete-products', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id, role }),
+      });
+  
+      const data = await response.json();
+  
+      if (response.ok) {
+        // If the product was successfully deleted, update the local state
+        setProducts(products.filter(product => product._id !== id));
+        alert(data.message);
+      } else {
+        // Handle any errors returned by the API
+        alert(data.message);
+      }
+    } catch (error) {
+      console.error('Error deleting product:', error);
+      alert('Failed to delete product.');
+    }
   };
+  
 
   const handleAddUser = (e) => {
     e.preventDefault();
