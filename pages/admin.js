@@ -10,13 +10,6 @@ export default function Admin() {
 
   const [activeTab, setActiveTab] = useState('manageProducts');
   const [products, setProducts] = useState([
-    {
-      id: 1,
-      name: 'Burger Deluxe',
-      description: 'Juicy beef patty with fresh vegetables',
-      price: 9.99,
-      image: '/api/placeholder/300/200'
-    },
     // Add more products
   ]);
 
@@ -54,7 +47,7 @@ export default function Admin() {
     name: '',
     description: '',
     price: '',
-    image: ''
+    imageUrl: ''
   });
 
   const [users, setUsers] = useState([
@@ -75,17 +68,41 @@ export default function Admin() {
     },
     // Add more orders
   ]);
-
-  const handleAddProduct = (e) => {
+  const handleAddProduct = async (e) => {
     e.preventDefault();
+  
     const product = {
-      id: products.length + 1,
+      // id: products.length + 1, // Automatically calculate the ID
       ...newProduct,
-      price: parseFloat(newProduct.price)
+      price: parseFloat(newProduct.price), // Ensure price is a number
     };
-    setProducts([...products, product]);
-    setNewProduct({ name: '', description: '', price: '', image: '' });
+  
+    console.log(product);
+    try {
+      // Make API call to add the product
+      const response = await fetch('/api/add-products', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(product),
+      });
+  
+      const data = await response.json();
+  
+      if (response.ok) {
+        // Update local state with the new product
+        setProducts([...products, data.product]);
+        setNewProduct({ name: '', description: '', price: '', image: '' }); // Reset input fields
+        console.log('Product added successfully:', data.product);
+      } else {
+        console.error('Error adding product:', data.message);
+      }
+    } catch (error) {
+      console.error('Error during API call:', error);
+    }
   };
+  
 
   const handleRemoveProduct = (id) => {
     setProducts(products.filter(product => product.id !== id));
@@ -179,7 +196,7 @@ if(session){
                   type="text"
                   className="w-full border rounded-lg px-4 py-2"
                   value={newProduct.image}
-                  onChange={(e) => setNewProduct({...newProduct, image: e.target.value})}
+                  onChange={(e) => setNewProduct({...newProduct, imageUrl: e.target.value})}
                 />
               </div>
               <button
