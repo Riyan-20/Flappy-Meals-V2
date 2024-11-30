@@ -1,11 +1,30 @@
 // File: src/components/Navbar.js
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { signOut, useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const {data:session} = useSession(); 
+  const router = useRouter(); 
 
+
+  useEffect(()=>{
+
+    if(session){
+      setIsLoggedIn(true);
+    }else{
+      setIsLoggedIn(false)
+    }
+
+  },[])
+
+
+  const handleLogout = () => {
+    signOut(); 
+  }
   return (
     <nav className="bg-orange-500 p-4">
       <div className="container mx-auto flex justify-between items-center">
@@ -32,6 +51,9 @@ const Navbar = () => {
               </Link>
               <Link href="/my-orders" className="text-white hover:text-orange-200">
                 My Orders
+              </Link>
+              <Link onClick={handleLogout} href="" className="text-white hover:text-orange-200">
+                Logout
               </Link>
               {isAdmin && (
                 <Link href="/admin" className="text-white hover:text-orange-200">

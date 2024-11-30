@@ -4,15 +4,17 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import OrderCard from '../components/OrderCard';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 
 export default function MyOrders() {
   const [orders, setOrders] = useState([]);
   const [error, setError] = useState(null);
   const {data:session} = useSession(); 
+  const router = useRouter(); 
 
   useEffect(() => {
 
-    if(session.user.name){
+    if(session){
     const fetchOrders = async () => {
       try {
         const response = await fetch('/api/CurrentOrderForUser', {
@@ -36,9 +38,12 @@ export default function MyOrders() {
     };
 
     fetchOrders();
+  }else{
+    router.push('/login');
   }
   }, []);
 
+  if(session){
   return (
     <div>
       <Navbar />
@@ -58,4 +63,5 @@ export default function MyOrders() {
       <Footer />
     </div>
   );
+}
 }
