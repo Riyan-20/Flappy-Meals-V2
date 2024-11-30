@@ -2,11 +2,13 @@ import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
+import { useCart } from '../../context/CartContext';
+
 
 export default function ProductDetails() {
   const router = useRouter();
   const { id } = router.query; // Extract `id` from the route
-
+  const { dispatch } = useCart();
   const [product, setProduct] = useState(null); // Product state
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState(null); // Error state
@@ -35,6 +37,8 @@ export default function ProductDetails() {
 
   const addToCart = () => {
     // Add to cart logic
+      dispatch({ type: 'ADD_TO_CART', item: product });
+    
     router.push('/cart');
   };
 

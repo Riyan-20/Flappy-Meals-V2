@@ -13,7 +13,7 @@ export default async function handler(req, res) {
 
   try {
     // Reuse the existing MongoDB client
-    const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+    const client = await MongoClient.connect(uri);
     const database = client.db(dbName);
     const collection = database.collection("items");
 

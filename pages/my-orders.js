@@ -3,12 +3,16 @@ import { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import OrderCard from '../components/OrderCard';
+import { useSession } from 'next-auth/react';
 
 export default function MyOrders() {
   const [orders, setOrders] = useState([]);
   const [error, setError] = useState(null);
+  const {data:session} = useSession(); 
 
   useEffect(() => {
+
+    if(session.user.name){
     const fetchOrders = async () => {
       try {
         const response = await fetch('/api/CurrentOrderForUser', {
@@ -16,7 +20,7 @@ export default function MyOrders() {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ customerId: '21L1790' }), // Replace with the actual customerId
+          body: JSON.stringify({ customerId: session.user.name }), // Replace with the actual customerId
         });
 
         if (!response.ok) {
@@ -32,6 +36,7 @@ export default function MyOrders() {
     };
 
     fetchOrders();
+  }
   }, []);
 
   return (

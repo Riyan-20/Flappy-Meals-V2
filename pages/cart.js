@@ -30,7 +30,7 @@ export default function Cart() {
               {cartItems.map((item) => (
                 <div key={item.id} className="flex items-center border-b py-4">
                   <img
-                    src={item.image}
+                    src={item.imageUrl}
                     alt={item.name}
                     className="w-20 h-20 object-cover rounded"
                   />
