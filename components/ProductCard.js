@@ -11,7 +11,7 @@ const ProductCard = ({ product }) => {
   return (
     <div className="border rounded-lg overflow-hidden shadow-lg">
       <img
-        src={product.image}
+        src={product.imageUrl}
         alt={product.name}
         className="w-full h-48 object-cover"
       />
