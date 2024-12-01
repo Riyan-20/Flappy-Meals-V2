@@ -10,20 +10,24 @@ const ProductCard = ({ product }) => {
   };
 
   return (
-    <div className="border rounded-lg overflow-hidden shadow-lg">
+    <div className="border rounded-lg shadow-md bg-gray-50 p-4 hover:shadow-lg transition-shadow duration-200">
       <img
         src={product.imageUrl}
         alt={product.name}
-        className="w-full h-48 object-cover"
+        className="w-full h-48 object-cover rounded-md mb-4"
       />
-      <div className="p-4">
-        <h3 className="text-xl font-semibold">{product.name}</h3>
-        <p className="text-gray-600">{product.description}</p>
-        <div className="mt-4 flex justify-between items-center">
-          <span className="text-lg font-bold">${product.price}</span>
+      <div>
+        <h3 className="text-xl font-bold text-gray-800 font-josefin mb-2">
+          {product.name}
+        </h3>
+        <p className="text-gray-600 font-josefin mb-4">{product.description}</p>
+        <div className="flex justify-between items-center">
+          <span className="text-lg font-semibold text-red-600 font-josefin">
+            ${product.price}
+          </span>
           <button
             onClick={addToCart}
-            className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600"
+            className="bg-red-600 text-white px-4 py-2 rounded-full font-josefin font-bold hover:bg-red-700 transition-colors duration-200"
           >
             Add to Cart
           </button>

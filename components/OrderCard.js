@@ -1,7 +1,7 @@
 // components/OrderCard.js
 const OrderCard = ({ order }) => {
   return (
-    <div className="border rounded-lg p-4 mb-4 shadow-md">
+    <div className="border rounded-lg shadow-md bg-gray-50 p-4 mb-4 hover:shadow-lg transition-shadow duration-200">
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-lg font-semibold">Order #{order.orderId}</h3>
         <span className={`px-3 py-1 rounded-full text-sm ${

@@ -63,47 +63,64 @@ export default function ViewOrders() {
   return (
     <div>
       <div className="mb-8">
-        <ul className="flex space-x-4">
+        <ul className="flex border-b">
           <li
-            className={`cursor-pointer ${activeTab === 'availableOrders' ? 'font-bold' : ''}`}
+            className={`px-4 py-2 cursor-pointer ${
+              activeTab === 'availableOrders' ? 'border-b-2 border-red-500 font-bold text-red-500' : 'text-gray-600'
+            }`}
             onClick={() => setActiveTab('availableOrders')}
           >
             Available Orders
           </li>
           <li
-            className={`cursor-pointer ${activeTab === 'ongoingOrders' ? 'font-bold' : ''}`}
+            className={`px-4 py-2 cursor-pointer ${
+              activeTab === 'ongoingOrders' ? 'border-b-2 border-red-500 font-bold text-red-500' : 'text-gray-600'
+            }`}
             onClick={() => setActiveTab('ongoingOrders')}
           >
             Ongoing Orders
           </li>
           <li
-            className={`cursor-pointer ${activeTab === 'completedOrders' ? 'font-bold' : ''}`}
+            className={`px-4 py-2 cursor-pointer ${
+              activeTab === 'completedOrders' ? 'border-b-2 border-red-500 font-bold text-red-500' : 'text-gray-600'
+            }`}
             onClick={() => setActiveTab('completedOrders')}
           >
             Completed Orders
           </li>
         </ul>
       </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {orders.map(order => (
-          <div key={order._id} className="border rounded-lg p-4">
-            <h3 className="text-xl font-semibold">Order #{order.orderId}</h3>
-            <p className="text-gray-600">Status: {order.orderStatus}</p>
-            <p className="text-gray-600">Date: {order.orderDate}</p>
-            <div className="space-y-2">
-              {order.items.map((item, index) => (
-                <div key={index} className="flex justify-between">
-                  <span>{item.itemName} x {item.quantity}</span>
-                  <span>${item.pricePerItem ? item.pricePerItem.toFixed(2) : 'N/A'}</span>
-                </div>
-              ))}
+        {orders.map((order) => (
+          <div key={order._id} className="bg-white border rounded-lg shadow-lg p-6">
+            <h3 className="text-xl font-semibold text-gray-800 mb-2">Order #{order.orderId}</h3>
+            <p className="text-gray-600 mb-1">
+              <strong>Status:</strong> {order.orderStatus}
+            </p>
+            <p className="text-gray-600 mb-1">
+              <strong>Date:</strong> {order.orderDate}
+            </p>
+            <div className="mt-4">
+              <h4 className="text-lg font-bold text-gray-800 mb-2">Items:</h4>
+              <ul className="space-y-2">
+                {order.items.map((item, index) => (
+                  <li key={index} className="flex justify-between">
+                    <span>{item.itemName} x {item.quantity}</span>
+                    <span>${item.pricePerItem ? item.pricePerItem.toFixed(2) : 'N/A'}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
-            <p className="text-lg font-bold mt-4">Total: ${order.totalPrice.toFixed(2)}</p>
+            <p className="text-lg font-bold text-gray-800 mt-4">
+              Total: ${order.totalPrice.toFixed(2)}
+            </p>
+
             {activeTab !== 'completedOrders' && (
               <div className="mt-4">
                 {activeTab === 'availableOrders' && (
                   <button
-                    className="bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 mr-2"
+                    className="bg-orange-500 text-white py-2 px-4 rounded-lg hover:bg-orange-700 transition duration-300 mr-2"
                     onClick={() => handleChangeOrderStatus(order._id, 'InProgress')}
                   >
                     Mark as In Progress
@@ -111,7 +128,7 @@ export default function ViewOrders() {
                 )}
                 {activeTab === 'ongoingOrders' && (
                   <button
-                    className="bg-green-500 text-white py-2 rounded-lg hover:bg-green-600"
+                    className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition duration-300"
                     onClick={() => handleChangeOrderStatus(order._id, 'Completed')}
                   >
                     Mark as Completed

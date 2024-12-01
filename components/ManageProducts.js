@@ -96,65 +96,73 @@ export default function ManageProducts() {
 
   return (
     <div>
-      <h2 className="text-xl font-semibold mb-4">Add New Product</h2>
-      <form onSubmit={handleAddProduct} className="space-y-4 mb-8">
-        <div>
-          <label className="block text-gray-700 mb-2">Product Name</label>
+      {/* Add New Product Form */}
+      <h2 className="text-3xl font-bold text-red-600 mb-6">Add New Product</h2>
+      <form onSubmit={handleAddProduct} className="bg-white shadow-lg rounded-lg p-6 mb-10">
+        <div className="mb-4">
+          <label className="block text-gray-700 font-medium mb-2">Product Name</label>
           <input
             type="text"
-            className="w-full border rounded-lg px-4 py-2"
+            className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring focus:border-red-500"
             value={newProduct.name}
             onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
           />
         </div>
-        <div>
-          <label className="block text-gray-700 mb-2">Description</label>
+        <div className="mb-4">
+          <label className="block text-gray-700 font-medium mb-2">Description</label>
           <textarea
-            className="w-full border rounded-lg px-4 py-2"
+            className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring focus:border-red-500"
             value={newProduct.description}
             onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
           />
         </div>
-        <div>
-          <label className="block text-gray-700 mb-2">Price</label>
+        <div className="mb-4">
+          <label className="block text-gray-700 font-medium mb-2">Price</label>
           <input
             type="number"
             step="0.01"
-            className="w-full border rounded-lg px-4 py-2"
+            className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring focus:border-red-500"
             value={newProduct.price}
             onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
           />
         </div>
-        <div>
-          <label className="block text-gray-700 mb-2">Image URL</label>
+        <div className="mb-4">
+          <label className="block text-gray-700 font-medium mb-2">Image URL</label>
           <input
             type="text"
-            className="w-full border rounded-lg px-4 py-2"
+            className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring focus:border-red-500"
             value={newProduct.imageUrl}
             onChange={(e) => setNewProduct({ ...newProduct, imageUrl: e.target.value })}
           />
         </div>
         <button
           type="submit"
-          className="w-full bg-orange-500 text-white py-2 rounded-lg hover:bg-orange-600"
+          className="w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 transition duration-300"
         >
           Add Product
         </button>
       </form>
-      <h2 className="text-xl font-semibold mb-4">Product List</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {products.map(product => (
-          <div key={product._id} className="border rounded-lg p-4">
-            <h3 className="text-xl font-semibold">{product.name}</h3>
-            <p className="text-gray-600">{product.description}</p>
-            <p className="text-lg font-bold">${product.price}</p>
-            <img
-              src={product.imageUrl}
-              alt={product.name}
-              className="w-full h-48 object-cover mt-4 rounded-lg"
-            />
+
+      {/* Product List */}
+      <h2 className="text-3xl font-bold text-red-600 mb-6">Product List</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {products.map((product) => (
+          <div
+            key={product._id}
+            className="bg-white border rounded-lg shadow-lg p-6 flex flex-col justify-between"
+          >
+            <div>
+              <h3 className="text-xl font-semibold text-gray-800">{product.name}</h3>
+              <p className="text-gray-600 mt-2">{product.description}</p>
+              <p className="text-lg font-bold text-gray-800 mt-4">${product.price.toFixed(2)}</p>
+              <img
+                src={product.imageUrl}
+                alt={product.name}
+                className="w-full h-48 object-cover rounded-lg mt-4"
+              />
+            </div>
             <button
-              className="mt-4 bg-red-500 text-white py-2 rounded-lg hover:bg-red-600"
+              className="mt-6 bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 transition duration-300"
               onClick={() => handleRemoveProduct(product._id)}
             >
               Remove Product
