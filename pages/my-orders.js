@@ -1,67 +1,48 @@
-// pages/my-orders.js
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import OrderCard from '../components/OrderCard';
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/router';
+import CompletedOrders from '../components/CompletedOrders';
+import OngoingOrders from '../components/OngoingOrders';
 
 export default function MyOrders() {
-  const [orders, setOrders] = useState([]);
-  const [error, setError] = useState(null);
-  const {data:session} = useSession(); 
-  const router = useRouter(); 
+  const [view, setView] = useState('ongoing'); // State to toggle between views
 
-  useEffect(() => {
+  const handleViewChange = (newView) => {
+    setView(newView);
+  };
 
-    if(session){
-    const fetchOrders = async () => {
-      try {
-        const response = await fetch('/api/CurrentOrderForUser', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ customerId: session.user.name }), // Replace with the actual customerId
-        });
-
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-
-        const data = await response.json();
-        console.log('Fetched orders:', data); // Log the fetched orders for debugging
-        setOrders(data);
-      } catch (error) {
-        setError(error.message);
-      }
-    };
-
-    fetchOrders();
-  }else{
-    router.push('/login');
-  }
-  }, []);
-
-  if(session){
   return (
     <div>
       <Navbar />
-      <main className="container mx-auto px-4 py-8">
-        <h1 className="text-2xl font-bold mb-6">My Orders</h1>
-        {error && <p className="text-red-500 mb-4">Error: {error}</p>}
+      <main className="container mx-auto px-4 py-12">
+        <h1 className="text-3xl font-bold text-red-600 mb-6 text-center">My Orders</h1>
+
+        {/* Tabs for toggling between views */}
+        <div className="flex justify-center mb-8">
+          <button
+            onClick={() => handleViewChange('ongoing')}
+            className={`px-6 py-2 rounded-t-lg font-semibold ${
+              view === 'ongoing' ? 'bg-red-500 text-white' : 'bg-gray-200 text-gray-700'
+            }`}
+          >
+            Ongoing Orders
+          </button>
+          <button
+            onClick={() => handleViewChange('completed')}
+            className={`px-6 py-2 rounded-t-lg font-semibold ${
+              view === 'completed' ? 'bg-red-500 text-white' : 'bg-gray-200 text-gray-700'
+            }`}
+          >
+            Completed Orders
+          </button>
+        </div>
+
+        {/* Conditionally render the ongoing or completed orders */}
         <div className="max-w-2xl mx-auto">
-          {orders.length > 0 ? (
-            orders.map((order) => (
-              <OrderCard key={order._id} order={order} />
-            ))
-          ) : (
-            <p className="text-xl text-gray-600">No current orders</p>
-          )}
+          {view === 'ongoing' ? <OngoingOrders /> : <CompletedOrders />}
         </div>
       </main>
       <Footer />
     </div>
   );
-}
 }

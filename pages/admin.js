@@ -28,26 +28,40 @@ export default function Admin() {
   return (
     <div>
       <Navbar />
-      <main className="container mx-auto px-4 py-8">
-        <h1 className="text-2xl font-bold mb-6">Admin Dashboard</h1>
-        <div className="mb-8">
-          <ul className="flex space-x-4">
-            <li
-              className={`cursor-pointer ${activeTab === 'manageProducts' ? 'font-bold' : ''}`}
-              onClick={() => setActiveTab('manageProducts')}
-            >
-              Manage Products
-            </li>
-            <li
-              className={`cursor-pointer ${activeTab === 'viewOrders' ? 'font-bold' : ''}`}
-              onClick={() => setActiveTab('viewOrders')}
-            >
-              View Orders
-            </li>
-          </ul>
+      <main className="container mx-auto px-4 py-12">
+        <h1 className="text-3xl font-bold text-red-600 text-center mb-10">
+          Admin Dashboard
+        </h1>
+        
+        {/* Tab Navigation */}
+        <div className="flex justify-center mb-10 border-b-2">
+          <button
+            className={`px-6 py-2 font-semibold rounded-t-lg transition-colors duration-200 ${
+              activeTab === 'manageProducts'
+                ? 'bg-red-500 text-white'
+                : 'bg-gray-200 text-gray-700'
+            }`}
+            onClick={() => setActiveTab('manageProducts')}
+          >
+            Manage Products
+          </button>
+          <button
+            className={`px-6 py-2 font-semibold rounded-t-lg transition-colors duration-200 ${
+              activeTab === 'viewOrders'
+                ? 'bg-red-500 text-white'
+                : 'bg-gray-200 text-gray-700'
+            }`}
+            onClick={() => setActiveTab('viewOrders')}
+          >
+            View Orders
+          </button>
         </div>
-        {activeTab === 'manageProducts' && <ManageProducts />}
-        {activeTab === 'viewOrders' && <ViewOrders />}
+
+        {/* Tab Content */}
+        <div className="bg-white rounded-lg shadow-lg p-6 max-w-5xl mx-auto">
+          {activeTab === 'manageProducts' && <ManageProducts />}
+          {activeTab === 'viewOrders' && <ViewOrders />}
+        </div>
       </main>
       <Footer />
     </div>

@@ -81,7 +81,7 @@ export default function Cart() {
                 </div>
                 <button
                   onClick={() => router.push('/confirm-order')}
-                  className="w-full bg-orange-500 text-white py-2 rounded-lg mt-4 hover:bg-orange-600"
+                  className="w-full bg-red-500 text-white py-2 rounded-lg mt-4 hover:bg-red-600"
                 >
                   Proceed to Checkout
                 </button>
@@ -93,7 +93,7 @@ export default function Cart() {
             <p className="text-xl text-gray-600">Your cart is empty</p>
             <button
               onClick={() => router.push('/dashboard')}
-              className="mt-4 bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600"
+              className="mt-4 bg-red-500 text-white px-6 py-2 rounded-lg hover:bg-red-600"
             >
               Browse Menu
             </button>

@@ -7,59 +7,66 @@ import { useRouter } from 'next/navigation';
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-  const {data:session} = useSession(); 
-  const router = useRouter(); 
+  const { data: session } = useSession();
+  const router = useRouter();
 
-
-  useEffect(()=>{
-    console.log(session);  
-    if(session){
+  useEffect(() => {
+    if (session) {
       setIsLoggedIn(true);
-      if(session.user.role === 'admin'){
-        setIsAdmin(true); 
+      if (session.user.role === 'admin') {
+        setIsAdmin(true);
       }
-    }else{
-      setIsLoggedIn(false)
+    } else {
+      setIsLoggedIn(false);
     }
-
-  },[])
-
+  }, [session]);
 
   const handleLogout = () => {
-    signOut(); 
-  }
+    signOut();
+  };
+
   return (
-    <nav className="bg-orange-500 p-4">
+    <nav className="bg-white shadow-none text-[#D91919] py-4">
       <div className="container mx-auto flex justify-between items-center">
-        <Link href="/" className="text-2xl font-bold text-white">
+        {/* Logo */}
+        <Link href="/" className="text-4xl font-bold no-underline hover:text-[#A70D0D]" style={{ fontFamily: 'Jomhuria' }}>
           Flappy Meals
         </Link>
-        <div className="flex space-x-4">
+
+        {/* Navigation Links */}
+        <div className="flex space-x-6 items-center">
           {!isLoggedIn ? (
             <>
-              <Link href="/login" className="text-white hover:text-orange-200">
+              <Link href="/login" className="text-2xl font-bold no-underline hover:text-[#A70D0D]" style={{ fontFamily: 'Jomhuria' }}>
                 Login
               </Link>
-              <Link href="/signup" className="text-white hover:text-orange-200">
+              <Link
+                href="/signup"
+                className="text-2xl font-bold no-underline hover:text-[#A70D0D]" style={{ fontFamily: 'Jomhuria' }}
+              >
                 Sign Up
               </Link>
             </>
           ) : (
             <>
-              <Link href="/dashboard" className="text-white hover:text-orange-200">
+              <Link href="/dashboard" className="text-lg font-semibold hover:text-[#A70D0D] no-underline">
                 Menu
               </Link>
-              <Link href="/cart" className="text-white hover:text-orange-200">
+              <Link href="/cart" className="text-lg font-semibold hover:text-[#A70D0D] no-underline">
                 Cart
               </Link>
-              <Link href="/my-orders" className="text-white hover:text-orange-200">
+              <Link href="/my-orders" className="text-lg font-semibold hover:text-[#A70D0D] no-underline">
                 My Orders
               </Link>
-              <Link onClick={handleLogout} href="" className="text-white hover:text-orange-200">
+              <Link
+                onClick={handleLogout}
+                href=""
+                className="text-lg font-semibold hover:text-[#A70D0D] no-underline"
+              >
                 Logout
               </Link>
               {isAdmin && (
-                <Link href="/admin" className="text-white hover:text-orange-200">
+                <Link href="/admin" className="text-lg font-semibold hover:text-[#A70D0D] no-underline">
                   Admin
                 </Link>
               )}

@@ -65,7 +65,7 @@ export default function ConfirmOrder() {
     <div>
       <Navbar />
       <main className="container mx-auto px-4 py-8">
-        <h1 className="text-2xl font-bold mb-6">Confirm Your Order</h1>
+        <h1 className="text-2xl font-bold mb-10 text-red-600 font-jomhuria text-center ">Confirm Your Order</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div>
             <h2 className="text-xl font-semibold mb-4">Delivery Details</h2>
@@ -119,7 +119,7 @@ export default function ConfirmOrder() {
               </div>
               <button
                 type="submit"
-                className="w-full bg-orange-500 text-white py-3 rounded-lg hover:bg-orange-600"
+                className="w-full bg-red-500 text-white py-3 rounded-lg hover:bg-red-600"
               >
                 Place Order
               </button>
