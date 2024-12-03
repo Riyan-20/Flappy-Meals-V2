@@ -1,11 +1,13 @@
 // pages/confirm-order.js
-import { useState } from 'react';
+import { useState, useEffect  } from 'react';
 import { useRouter } from 'next/router';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { useCart } from '../context/CartContext';
+import { useSession } from 'next-auth/react';
 
 export default function ConfirmOrder() {
+  const { data: session, status } = useSession();
   const router = useRouter();
   const { state: cartItems, dispatch } = useCart();
   const [formData, setFormData] = useState({
@@ -15,6 +17,24 @@ export default function ConfirmOrder() {
     specialInstructions: '',
     paymentMethod: 'card',
   });
+
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.push('/login'); // Redirect to login page if unauthenticated
+    }
+  }, [status, router]);
+
+  if (status === 'loading') {
+    return (
+      <div>
+        <Navbar />
+        <main className="container mx-auto px-4 py-8 text-center">
+          <h2 className="text-2xl font-bold text-red-600">Checking authentication...</h2>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   const total = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 

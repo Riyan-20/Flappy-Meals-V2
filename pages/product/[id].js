@@ -3,9 +3,10 @@ import { useState, useEffect } from 'react';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import { useCart } from '../../context/CartContext';
-
+import { useSession } from "next-auth/react";
 
 export default function ProductDetails() {
+  const { data: session, status } = useSession();
   const router = useRouter();
   const { id } = router.query; // Extract `id` from the route
   const { dispatch } = useCart();
@@ -13,47 +14,49 @@ export default function ProductDetails() {
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState(null); // Error state
 
+  // Redirect to login if unauthenticated
   useEffect(() => {
-    // Fetch product details if `id` is available
-    if (!id) return;
+    if (status === "unauthenticated") {
+      router.push("/login");
+    }
+  }, [status, router]);
 
-    const fetchProduct = async () => {
-      try {
-        const response = await fetch(`/api/items/${id}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch product details');
+  // Fetch product details if authenticated and `id` is available
+  useEffect(() => {
+    if (status === "authenticated" && id) {
+      const fetchProduct = async () => {
+        try {
+          const response = await fetch(`/api/items/${id}`);
+          if (!response.ok) {
+            throw new Error('Failed to fetch product details');
+          }
+          const data = await response.json();
+          setProduct(data); // Set product data
+          setLoading(false);
+        } catch (err) {
+          setError(err.message);
+          setLoading(false);
         }
-        const data = await response.json();
-        setProduct(data); // Set product data
-        setLoading(false);
-      } catch (err) {
-        setError(err.message);
-        setLoading(false);
-      }
-    };
+      };
 
-    fetchProduct();
-  }, [id]); // Re-run when `id` changes
+      fetchProduct();
+    }
+  }, [id, status]);
 
-  const addToCart = () => {
-    // Add to cart logic
-      dispatch({ type: 'ADD_TO_CART', item: product });
-    
-    router.push('/cart');
-  };
-
-  if (loading) {
+  // Show a loading state while determining authentication or fetching data
+  if (status === "loading" || loading) {
     return (
       <div>
         <Navbar />
         <main className="container mx-auto px-4 py-8 text-center">
-          <h2 className="text-2xl font-bold text-red-600">Loading product details...</h2>
+          <h2 className="text-2xl font-bold text-red-600">Loading...</h2>
         </main>
         <Footer />
       </div>
     );
   }
 
+  // Error or unauthenticated handling
   if (error) {
     return (
       <div>
@@ -77,6 +80,12 @@ export default function ProductDetails() {
       </div>
     );
   }
+
+  const addToCart = () => {
+    // Add to cart logic
+    dispatch({ type: 'ADD_TO_CART', item: product });
+    router.push('/cart');
+  };
 
   return (
     <div>
