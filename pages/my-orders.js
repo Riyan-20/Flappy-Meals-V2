@@ -1,15 +1,33 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { useSession } from 'next-auth/react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import CompletedOrders from '../components/CompletedOrders';
 import OngoingOrders from '../components/OngoingOrders';
 
 export default function MyOrders() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
   const [view, setView] = useState('ongoing'); // State to toggle between views
 
-  const handleViewChange = (newView) => {
-    setView(newView);
-  };
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.push('/login'); // Redirect unauthenticated users to the login page
+    }
+  }, [status, router]);
+
+  if (status === 'loading') {
+    return (
+      <div>
+        <Navbar />
+        <main className="container mx-auto px-4 py-12 text-center">
+          <h2 className="text-2xl font-bold text-red-600">Checking authentication...</h2>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -20,7 +38,7 @@ export default function MyOrders() {
         {/* Tabs for toggling between views */}
         <div className="flex justify-center mb-8">
           <button
-            onClick={() => handleViewChange('ongoing')}
+            onClick={() => setView('ongoing')}
             className={`px-6 py-2 rounded-t-lg font-semibold ${
               view === 'ongoing' ? 'bg-red-500 text-white' : 'bg-gray-200 text-gray-700'
             }`}
@@ -28,7 +46,7 @@ export default function MyOrders() {
             Ongoing Orders
           </button>
           <button
-            onClick={() => handleViewChange('completed')}
+            onClick={() => setView('completed')}
             className={`px-6 py-2 rounded-t-lg font-semibold ${
               view === 'completed' ? 'bg-red-500 text-white' : 'bg-gray-200 text-gray-700'
             }`}

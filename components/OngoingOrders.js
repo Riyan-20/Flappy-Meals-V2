@@ -1,4 +1,3 @@
-// components/OngoingOrders.js
 import { useState, useEffect } from 'react';
 import OrderCard from './OrderCard';
 import { useSession } from 'next-auth/react';
@@ -25,7 +24,15 @@ const OngoingOrders = () => {
           }
 
           const data = await response.json();
-          setOrders(data);
+
+          // Sort orders by orderDate and orderTime in descending order
+          const sortedOrders = data.sort((a, b) => {
+            const dateA = new Date(`${a.orderDate}T${a.orderTime}`);
+            const dateB = new Date(`${b.orderDate}T${b.orderTime}`);
+            return dateB - dateA; // Descending order
+          });
+
+          setOrders(sortedOrders);
         } catch (error) {
           setError(error.message);
         }
