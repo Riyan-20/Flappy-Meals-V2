@@ -1,3 +1,4 @@
+import { connectDB } from "@/pages/lib/dbConnect";
 import { MongoClient, ObjectId } from "mongodb";
 
 // MongoDB connection string and database name
@@ -13,7 +14,8 @@ export default async function handler(req, res) {
 
   try {
     // Reuse the existing MongoDB client
-    const client = await MongoClient.connect(uri);
+    // const client = await MongoClient.connect(uri);
+    const client = await connectDB();
     const database = client.db(dbName);
     const collection = database.collection("items");
 
@@ -29,7 +31,7 @@ export default async function handler(req, res) {
       return res.status(404).json({ error: "Product not found" });
     }
 
-    console.log(product);
+    // console.log(product);
     // Return the product details
     res.status(200).json(product);
   } catch (error) {

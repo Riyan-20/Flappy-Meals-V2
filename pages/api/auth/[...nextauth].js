@@ -1,6 +1,7 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { MongoClient } from "mongodb";
+import { connectDB } from "@/pages/lib/dbConnect";
 
 const clientPromise = MongoClient.connect(
   "mongodb+srv://admin:flappy123@flappymeals.xkolew3.mongodb.net/sample_mflix?retryWrites=true&w=majority"
@@ -19,7 +20,8 @@ export default NextAuth({
         const { username, password, isSignup } = credentials;
 
         try {
-          const client = await clientPromise;
+          const client = await connectDB();
+          // const client = await clientPromise;
           const db = client.db("flappyMeals");
           const collection = db.collection("customer");
 

@@ -1,6 +1,7 @@
 import { MongoClient, ObjectId } from 'mongodb';
+import { connectDB } from '../lib/dbConnect';
 
-const uri = "mongodb+srv://admin:flappy123@flappymeals.xkolew3.mongodb.net/sample_mflix?retryWrites=true&w=majority";
+// const uri = "mongodb+srv://admin:flappy123@flappymeals.xkolew3.mongodb.net/sample_mflix?retryWrites=true&w=majority";
 
 export default async function handler(req, res) {
   if (req.method !== 'DELETE') {
@@ -21,7 +22,8 @@ export default async function handler(req, res) {
 
   try {
     // Connect to MongoDB
-    const client = await MongoClient.connect(uri);
+    const client = await connectDB();
+    // const client = await MongoClient.connect(uri);
     const db = client.db('flappyMeals');
     const collection = db.collection('items');
 

@@ -1,5 +1,6 @@
 // pages/api/saveOrder.js
 import { MongoClient } from "mongodb";
+import { connectDB } from "../lib/dbConnect";
 
 const clientPromise = MongoClient.connect(
   "mongodb+srv://admin:flappy123@flappymeals.xkolew3.mongodb.net/sample_mflix?retryWrites=true&w=majority"
@@ -8,7 +9,8 @@ const clientPromise = MongoClient.connect(
 export default async function handler(req, res) {
   if (req.method === "POST") {
     try {
-      const client = await clientPromise;
+      const client = await connectDB();
+      // const client = await clientPromise;
       const database = client.db("flappyMeals");
       const collection = database.collection("orders");
 

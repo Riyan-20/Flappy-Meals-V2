@@ -87,7 +87,7 @@ export default function Dashboard({ initialProducts }) {
 // Server-side data fetching
 export async function getServerSideProps() {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/items`);
+    const response = await fetch("http://localhost:3000/api/items");
     const initialProducts = await response.json();
 
     return {

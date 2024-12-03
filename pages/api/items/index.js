@@ -1,9 +1,9 @@
 import { MongoClient } from "mongodb";
-
-// MongoDB client setup
-const clientPromise = MongoClient.connect(
-  "mongodb+srv://admin:flappy123@flappymeals.xkolew3.mongodb.net/sample_mflix?retryWrites=true&w=majority"
-);
+import { connectDB } from "@/pages/lib/dbConnect";
+// // MongoDB client setup
+// const clientPromise = MongoClient.connect(
+//   "mongodb+srv://admin:flappy123@flappymeals.xkolew3.mongodb.net/sample_mflix?retryWrites=true&w=majority"
+// );
 
 export default async function handler(req, res) {
   if (req.method !== "GET") {
@@ -13,8 +13,8 @@ export default async function handler(req, res) {
   }
 
   try {
-    console.log("Connecting to MongoDB...");
-    const client = await clientPromise;
+    // console.log("Connecting to MongoDB...");
+    const client = await connectDB();
     const database = client.db("flappyMeals");
     const collection = database.collection("items");
 
