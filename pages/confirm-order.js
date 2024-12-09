@@ -1,13 +1,11 @@
-// pages/confirm-order.js
-import { useState, useEffect  } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { useCart } from '../context/CartContext';
-import { useSession } from 'next-auth/react';
+import { getSession } from 'next-auth/react';
 
-export default function ConfirmOrder() {
-  const { data: session, status } = useSession();
+export default function ConfirmOrder({ session }) {
   const router = useRouter();
   const { state: cartItems, dispatch } = useCart();
   const [formData, setFormData] = useState({
@@ -17,14 +15,9 @@ export default function ConfirmOrder() {
     specialInstructions: '',
     paymentMethod: 'card',
   });
+  const [isLoading, setIsLoading] = useState(false); // Loading state
 
-  useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/login'); // Redirect to login page if unauthenticated
-    }
-  }, [status, router]);
-
-  if (status === 'loading') {
+  if (!session) {
     return (
       <div>
         <Navbar />
@@ -40,6 +33,7 @@ export default function ConfirmOrder() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true); // Set loading state to true
     try {
       const response = await fetch('/api/saveOrder', {
         method: 'POST',
@@ -47,7 +41,7 @@ export default function ConfirmOrder() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          customerId: '21L1790', // Replace with actual customerId
+          customerId: session.user.name, // Replace with actual customerId
           items: cartItems.map(item => ({
             id: item.id,
             name: item.name,
@@ -78,6 +72,8 @@ export default function ConfirmOrder() {
       }
     } catch (error) {
       console.error('Error saving order:', error);
+    } finally {
+      setIsLoading(false); // Set loading state to false after request
     }
   };
 
@@ -137,12 +133,22 @@ export default function ConfirmOrder() {
                   <option value="cash">Cash on Delivery</option>
                 </select>
               </div>
-              <button
-                type="submit"
-                className="w-full bg-red-500 text-white py-3 rounded-lg hover:bg-red-600"
-              >
-                Place Order
-              </button>
+              {isLoading ? (
+                <button
+                  type="button"
+                  disabled
+                  className="w-full bg-red-500 text-white py-3 rounded-lg hover:bg-red-600"
+                >
+                  Placing Order...
+                </button>
+              ) : (
+                <button
+                  type="submit"
+                  className="w-full bg-red-500 text-white py-3 rounded-lg hover:bg-red-600"
+                >
+                  Place Order
+                </button>
+              )}
             </form>
           </div>
           <div>
@@ -173,4 +179,23 @@ export default function ConfirmOrder() {
       <Footer />
     </div>
   );
+}
+
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {
+      session,
+    },
+  };
 }

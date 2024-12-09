@@ -24,7 +24,7 @@ const OngoingOrders = () => {
           }
 
           const data = await response.json();
-
+          console.log(data,session.user.name)
           // Sort orders by orderDate and orderTime in descending order
           const sortedOrders = data.sort((a, b) => {
             const dateA = new Date(`${a.orderDate}T${a.orderTime}`);
