@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
-
+import Image from 'next/image';
 export default function ManageProducts() {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -155,11 +155,23 @@ export default function ManageProducts() {
               <h3 className="text-xl font-semibold text-gray-800">{product.name}</h3>
               <p className="text-gray-600 mt-2">{product.description}</p>
               <p className="text-lg font-bold text-gray-800 mt-4">${product.price.toFixed(2)}</p>
-              <img
+              {/* <img
                 src={product.imageUrl}
                 alt={product.name}
                 className="w-full h-48 object-cover rounded-lg mt-4"
-              />
+              /> */}
+
+<div className="relative w-full h-48 mb-4">
+        <Image
+          src={product.imageUrl}
+          alt={product.name}
+          layout="fill"
+          // width={80}
+          // height={80}
+          objectFit="cover"
+          className="rounded-md"
+        />
+      </div>
             </div>
             <button
               className="mt-6 bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 transition duration-300"
