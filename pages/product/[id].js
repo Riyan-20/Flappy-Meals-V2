@@ -3,16 +3,13 @@ import { useState, useEffect } from 'react';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import { useCart } from '../../context/CartContext';
-import { useSession } from "next-auth/react";
+import { useSession, getSession } from "next-auth/react";
 
-export default function ProductDetails() {
+export default function ProductDetails({ product, error }) {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const { id } = router.query; // Extract `id` from the route
   const { dispatch } = useCart();
-  const [product, setProduct] = useState(null); // Product state
-  const [loading, setLoading] = useState(true); // Loading state
-  const [error, setError] = useState(null); // Error state
+  const [loading, setLoading] = useState(false); // Loading state
 
   // Redirect to login if unauthenticated
   useEffect(() => {
@@ -21,27 +18,11 @@ export default function ProductDetails() {
     }
   }, [status, router]);
 
-  // Fetch product details if authenticated and `id` is available
-  useEffect(() => {
-    if (status === "authenticated" && id) {
-      const fetchProduct = async () => {
-        try {
-          const response = await fetch(`/api/items/${id}`);
-          if (!response.ok) {
-            throw new Error('Failed to fetch product details');
-          }
-          const data = await response.json();
-          setProduct(data); // Set product data
-          setLoading(false);
-        } catch (err) {
-          setError(err.message);
-          setLoading(false);
-        }
-      };
-
-      fetchProduct();
-    }
-  }, [id, status]);
+  const addToCart = () => {
+    // Add to cart logic
+    dispatch({ type: 'ADD_TO_CART', item: product });
+    router.push('/cart');
+  };
 
   // Show a loading state while determining authentication or fetching data
   if (status === "loading" || loading) {
@@ -81,12 +62,6 @@ export default function ProductDetails() {
     );
   }
 
-  const addToCart = () => {
-    // Add to cart logic
-    dispatch({ type: 'ADD_TO_CART', item: product });
-    router.push('/cart');
-  };
-
   return (
     <div>
       <Navbar />
@@ -125,4 +100,39 @@ export default function ProductDetails() {
       <Footer />
     </div>
   );
+}
+
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+
+  const { id } = context.params;
+
+  try {
+    const response = await fetch(`http://localhost:3000/api/items/${id}`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch product details');
+    }
+    const product = await response.json();
+
+    return {
+      props: {
+        product,
+      },
+    };
+  } catch (err) {
+    return {
+      props: {
+        error: err.message,
+      },
+    };
+  }
 }

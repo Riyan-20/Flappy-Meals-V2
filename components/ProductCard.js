@@ -11,11 +11,15 @@ const ProductCard = ({ product }) => {
 
   return (
     <div className="border rounded-lg shadow-md bg-gray-50 p-4 hover:shadow-lg transition-shadow duration-200">
-      <img
-        src={product.imageUrl}
-        alt={product.name}
-        className="w-full h-48 object-cover rounded-md mb-4"
-      />
+      <div className="relative w-full h-48 mb-4">
+        <Image
+          src={product.imageUrl}
+          alt={product.name}
+          layout="fill"
+          objectFit="cover"
+          className="rounded-md"
+        />
+      </div>
       <div>
         <h3 className="text-xl font-bold text-gray-800 font-josefin mb-2">
           {product.name}
