@@ -1,23 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { useSession } from 'next-auth/react';
+import { getSession } from 'next-auth/react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import CompletedOrders from '../components/CompletedOrders';
 import OngoingOrders from '../components/OngoingOrders';
 
-export default function MyOrders() {
-  const { data: session, status } = useSession();
+export default function MyOrders({ session }) {
   const router = useRouter();
   const [view, setView] = useState('ongoing'); // State to toggle between views
 
-  useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/login'); // Redirect unauthenticated users to the login page
-    }
-  }, [status, router]);
-
-  if (status === 'loading') {
+  if (!session) {
     return (
       <div>
         <Navbar />
@@ -63,4 +56,23 @@ export default function MyOrders() {
       <Footer />
     </div>
   );
+}
+
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {
+      session,
+    },
+  };
 }
