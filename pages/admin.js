@@ -13,12 +13,11 @@ export default function Admin() {
   const [activeTab, setActiveTab] = useState('manageProducts');
 
   useEffect(() => {
-    if (status === 'loading') return; // Wait until session is loaded
+    if (status === 'loading') return; 
     if (!session) {
       router.push('/');
     } else {
       if (session.user.role === 'admin') {
-        // Do nothing, admin is already on the page
       } else {
         router.push('/');
       }
@@ -33,7 +32,6 @@ export default function Admin() {
           Admin Dashboard
         </h1>
         
-        {/* Tab Navigation */}
         <div className="flex justify-center mb-10 border-b-2">
           <button
             className={`px-6 py-2 font-semibold rounded-t-lg transition-colors duration-200 ${
@@ -57,7 +55,6 @@ export default function Admin() {
           </button>
         </div>
 
-        {/* Tab Content */}
         <div className="bg-white rounded-lg shadow-lg p-6 max-w-5xl mx-auto">
           {activeTab === 'manageProducts' && <ManageProducts />}
           {activeTab === 'viewOrders' && <ViewOrders />}

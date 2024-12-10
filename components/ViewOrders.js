@@ -1,8 +1,8 @@
-// components/ViewOrders.js
+
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import OrderCard from './OrderCard'; // Assuming you have an OrderCard component
+
 
 export default function ViewOrders() {
   const { data: session, status } = useSession();
@@ -15,14 +15,14 @@ export default function ViewOrders() {
       try {
         const response = await fetch(`/api/orders?orderStatus=${orderStatus}`);
         const data = await response.json();
-        console.log('Fetched orders:', data.orders); // Log the fetched orders for debugging
+        console.log('Fetched orders:', data.orders);
         setOrders(data.orders);
       } catch (error) {
         console.error('Error fetching orders:', error);
       }
     };
 
-    if (status === 'loading') return; // Wait until session is loaded
+    if (status === 'loading') return; 
     if (!session) {
       router.push('/');
     } else {

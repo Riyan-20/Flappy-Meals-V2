@@ -1,4 +1,3 @@
-// File: src/components/Navbar.js
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { signOut, useSession } from 'next-auth/react';
@@ -28,12 +27,11 @@ const Navbar = () => {
   return (
     <nav className="bg-white shadow-none text-[#D91919] py-4">
       <div className="container mx-auto flex justify-between items-center">
-        {/* Logo */}
+
         <Link href="/" className="text-4xl font-bold no-underline hover:text-[#A70D0D]" style={{ fontFamily: 'Jomhuria' }}>
           Flappy Meals
         </Link>
 
-        {/* Navigation Links */}
         <div className="flex space-x-6 items-center">
           {!isLoggedIn ? (
             <>

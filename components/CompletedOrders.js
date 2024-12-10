@@ -12,11 +12,11 @@ const CompletedOrders = () => {
       const fetchCompletedOrders = async () => {
         try {
           const response = await fetch('/api/completedOrders', {
-            method: 'POST', // Changed to POST to match the updated API
+            method: 'POST', 
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ customerId: session.user.name }), // Send `customerId` in body
+            body: JSON.stringify({ customerId: session.user.name }), 
           });
 
           if (!response.ok) {

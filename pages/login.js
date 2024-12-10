@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { signIn, useSession } from 'next-auth/react'; // Import signIn from next-auth
-import { useRouter } from 'next/router'; // Import useRouter for redirection
+import { signIn, useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
@@ -12,29 +12,29 @@ export default function Login() {
 
   const {data:session} = useSession();
 
-  const [error, setError] = useState(''); // To hold error message
-  const [isLoading, setIsLoading] = useState(false); // To handle loading state
-  const router = useRouter(); // To redirect the user after login
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter(); 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    setError(''); // Reset error before new login attempt
+    setError('');
 
-    // Attempt login with NextAuth's signIn method
+    
     const res = await signIn('credentials', {
-      redirect: false, // Disable redirect after login
+      redirect: false, 
       username: formData.email,
       password: formData.password,
       isSignup : false ,
     });
 
-    setIsLoading(false); // Set loading state to false after request
+    setIsLoading(false); 
 
     if (res?.error) {
-      setError('Invalid email or password'); // Show error if login fails
+      setError('Invalid email or password'); 
     } else {
-        router.push('/dashboard'); // Redirect to dashboard on successful login
+        router.push('/dashboard');
     }
   };
 
@@ -45,7 +45,7 @@ export default function Login() {
         <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-6">
           <h2 className="text-3xl font-bold text-gray-800 text-center mb-6">Login</h2>
 
-          {/* Display error message if any */}
+       
           {error && <div className="text-red-500 text-center mb-4">{error}</div>}
 
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -72,7 +72,7 @@ export default function Login() {
             <button
               type="submit"
               className="w-full bg-red-500 text-white font-medium py-2 rounded-lg hover:bg-red-600 transition duration-200"
-              disabled={isLoading} // Disable button while loading
+              disabled={isLoading}
             >
               {isLoading ? 'Logging in...' : 'Login'}
             </button>

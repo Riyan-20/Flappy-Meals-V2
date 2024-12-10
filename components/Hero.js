@@ -1,4 +1,3 @@
-//components/Hero.js
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import VectorImage from '../public/Vector.png';
@@ -13,7 +12,7 @@ const Hero = () => {
   return (
     <section className="bg-white relative">
       <div className="container mx-auto px-4 py-16 flex flex-col md:flex-row items-center justify-between">
-        {/* Left Content */}
+        
         <div className="flex-1 max-w-lg text-center md:text-left mb-10 md:mb-0 animate__animated animate__slideInLeft">
           <div>
             <button className="bg-red-600 text-white px-4 py-2 rounded-full font-medium tracking-wider hover:bg-red-700 transition mb-4">
@@ -36,7 +35,7 @@ const Hero = () => {
             </button>
           </div>
         </div>
-        {/* Right Content */}
+       
         <div className="flex-1 text-center md:text-right">
           <Image src={VectorImage} alt="Delivery" width={500} height={500} />
         </div>

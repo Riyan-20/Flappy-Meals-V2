@@ -1,4 +1,3 @@
-// components/OrderCard.js
 const OrderCard = ({ order }) => {
   return (
     <div className="border rounded-lg shadow-md bg-gray-50 p-4 mb-4 hover:shadow-lg transition-shadow duration-200">

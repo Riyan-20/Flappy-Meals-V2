@@ -1,4 +1,3 @@
-// pages/api/saveOrder.js
 import { MongoClient } from "mongodb";
 import { connectDB } from "../lib/dbConnect";
 
@@ -10,7 +9,7 @@ export default async function handler(req, res) {
   if (req.method === "POST") {
     try {
       const client = await connectDB();
-      // const client = await clientPromise;
+
       const database = client.db("flappyMeals");
       const collection = database.collection("orders");
 

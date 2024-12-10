@@ -21,7 +21,7 @@ export default function ManageProducts() {
       setProducts(initialProducts);
     };
 
-    if (status === 'loading') return; // Wait until session is loaded
+    if (status === 'loading') return; 
     if (!session) {
       router.push('/');
     } else {
@@ -38,7 +38,7 @@ export default function ManageProducts() {
 
     const product = {
       ...newProduct,
-      price: parseFloat(newProduct.price), // Ensure price is a number
+      price: parseFloat(newProduct.price), 
     };
 
     try {
@@ -54,7 +54,7 @@ export default function ManageProducts() {
 
       if (response.ok) {
         setProducts([...products, data.product]);
-        setNewProduct({ name: '', description: '', price: '', image: '' }); // Reset input fields
+        setNewProduct({ name: '', description: '', price: '', image: '' }); 
       } else {
         console.error('Error adding product:', data.message);
       }
@@ -96,7 +96,7 @@ export default function ManageProducts() {
 
   return (
     <div>
-      {/* Add New Product Form */}
+
       <h2 className="text-3xl font-bold text-red-600 mb-6">Add New Product</h2>
       <form onSubmit={handleAddProduct} className="bg-white shadow-lg rounded-lg p-6 mb-10">
         <div className="mb-4">
@@ -143,7 +143,6 @@ export default function ManageProducts() {
         </button>
       </form>
 
-      {/* Product List */}
       <h2 className="text-3xl font-bold text-red-600 mb-6">Product List</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {products.map((product) => (
@@ -155,11 +154,7 @@ export default function ManageProducts() {
               <h3 className="text-xl font-semibold text-gray-800">{product.name}</h3>
               <p className="text-gray-600 mt-2">{product.description}</p>
               <p className="text-lg font-bold text-gray-800 mt-4">${product.price.toFixed(2)}</p>
-              {/* <img
-                src={product.imageUrl}
-                alt={product.name}
-                className="w-full h-48 object-cover rounded-lg mt-4"
-              /> */}
+            
 
 <div className="relative w-full h-48 mb-4">
         <Image

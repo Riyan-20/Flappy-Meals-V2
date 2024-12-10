@@ -9,9 +9,8 @@ export default function ProductDetails({ product, error }) {
   const { data: session, status } = useSession();
   const router = useRouter();
   const { dispatch } = useCart();
-  const [loading, setLoading] = useState(false); // Loading state
+  const [loading, setLoading] = useState(false);
 
-  // Redirect to login if unauthenticated
   useEffect(() => {
     if (status === "unauthenticated") {
       router.push("/login");
@@ -19,12 +18,12 @@ export default function ProductDetails({ product, error }) {
   }, [status, router]);
 
   const addToCart = () => {
-    // Add to cart logic
+    
     dispatch({ type: 'ADD_TO_CART', item: product });
     router.push('/cart');
   };
 
-  // Show a loading state while determining authentication or fetching data
+  
   if (status === "loading" || loading) {
     return (
       <div>
@@ -37,7 +36,6 @@ export default function ProductDetails({ product, error }) {
     );
   }
 
-  // Error or unauthenticated handling
   if (error) {
     return (
       <div>

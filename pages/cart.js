@@ -13,13 +13,11 @@ export default function Cart() {
   const cartItems = state;
 
   useEffect(() => {
-    // Redirect to login page if the user is not logged in
     if (status === "unauthenticated") {
       router.push("/login");
     }
   }, [status, router]);
   
-  // Show a loading state while authentication is being determined
   if (status === "loading") {
     return (
       <div>

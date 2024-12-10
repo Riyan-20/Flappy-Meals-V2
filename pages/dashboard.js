@@ -6,7 +6,6 @@ import { useSession } from 'next-auth/react';
 import { useEffect } from 'react';
 import Footer from '../components/Footer';
 
-// Fetcher function for useSWR
 const fetcher = async (url) => {
   const response = await fetch(url);
   if (!response.ok) {
@@ -20,13 +19,11 @@ export default function Dashboard({ initialProducts }) {
   const { data: session, status } = useSession();
 
   useEffect(() => {
-    // Redirect to login page if the user is not logged in
     if (status === 'unauthenticated') {
       router.push('/login');
     }
   }, [status, router]);
 
-  // SWR hook for client-side revalidation
   const { data: products, error } = useSWR('/api/items', fetcher, {
     fallbackData: initialProducts,
     revalidateOnFocus: true,
@@ -36,7 +33,6 @@ export default function Dashboard({ initialProducts }) {
     router.push(`/product/${id}`);
   };
 
-  // Show loading screen until authentication status is determined
   if (status === 'loading') {
     return (
       <div>
@@ -48,7 +44,6 @@ export default function Dashboard({ initialProducts }) {
     );
   }
 
-  // Show error if data fetching fails
   if (error) {
     return (
       <div>
@@ -84,7 +79,6 @@ export default function Dashboard({ initialProducts }) {
   );
 }
 
-// Server-side data fetching
 export async function getServerSideProps() {
   try {
     const response = await fetch("http://localhost:3000/api/items");

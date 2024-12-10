@@ -15,7 +15,7 @@ export default function ConfirmOrder({ session }) {
     specialInstructions: '',
     paymentMethod: 'card',
   });
-  const [isLoading, setIsLoading] = useState(false); // Loading state
+  const [isLoading, setIsLoading] = useState(false); 
 
   if (!session) {
     return (
@@ -33,7 +33,7 @@ export default function ConfirmOrder({ session }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true); // Set loading state to true
+    setIsLoading(true); 
     try {
       const response = await fetch('/api/saveOrder', {
         method: 'POST',
@@ -41,7 +41,7 @@ export default function ConfirmOrder({ session }) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          customerId: session.user.name, // Replace with actual customerId
+          customerId: session.user.name,
           items: cartItems.map(item => ({
             id: item.id,
             name: item.name,
@@ -62,7 +62,7 @@ export default function ConfirmOrder({ session }) {
       });
 
       if (response.ok) {
-        // Clear the cart and redirect to my-orders page
+
         dispatch({ type: 'CLEAR_CART' });
         localStorage.removeItem('cartItems');
         router.push('/my-orders');
@@ -73,7 +73,7 @@ export default function ConfirmOrder({ session }) {
     } catch (error) {
       console.error('Error saving order:', error);
     } finally {
-      setIsLoading(false); // Set loading state to false after request
+      setIsLoading(false);
     }
   };
 
